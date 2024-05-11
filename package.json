@@ -1,0 +1,47 @@
+{
+  "name": "slow-reverber",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@catamphetamine/id3js": "^1.0.1",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.14",
+    "axios": "^1.6.8",
+    "browserify": "^17.0.0",
+    "buffer": "^6.0.3",
+    "cors": "^2.8.5",
+    "howler": "^2.2.4",
+    "id3-parser": "^3.0.0",
+    "id3js": "^2.1.1",
+    "jdataview": "^2.5.0",
+    "jsmediatags": "^3.9.7",
+    "multer": "^1.4.5-lts.1",
+    "music-metadata": "^7.14.0",
+    "music-metadata-browser": "^2.5.10",
+    "mutag": "^2.0.7",
+    "node-id3": "^0.2.6",
+    "parse-audio-metadata": "^1.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "read-id3-tags": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "vite": "^5.2.0"
+  }
+}
