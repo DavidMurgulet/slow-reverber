@@ -1,59 +1,85 @@
 const multer = require('multer');
 const express = require('express');
 const cors = require('cors');
-const AudioEditor = require('./AudioEditor');
+const tagEditor = require('./MetadataEditor');
+const audioProcessor = require('./AudioEditor');
+const parser = require('body-parser');
+const path = require('path');
+
 
 const app = express();
-const upload = multer({dest: 'uploads/'});
+
+// app.use(cors());
+
+app.use(cors({
+    origin: 'http://localhost:5173'
+  }));
+
+app.use(parser.json());
 
 
-// 1. user uploads 
-// 2. slow + reverb ui appears.
-//    available meta data is also presented. 
-// 3. user changes metadata and sliders for reverb slow
-// 4. submit -> loading screen -> file download
+const upload = multer( { dest: 'uploads/' } );
 
-app.post('localhost:5173/upload', upload.single('file'), (req, res) => {
+app.post('/parse', upload.single('file'), async (req, res) => {
     const file = req.file;
-    console.log("received request", file);
-    res.send('File uploaded and stored successfully');
+
+    try {
+        const tags = await tagEditor.parseMetadata(file.path);
+        console.log(file.path);
+        res.status(200).send(tags);
+
+    } catch (error) {  
+        console.log(error);
+        res.status(500).send('error parsing metadata');
+    }
 });
 
-// app.get( => {
+app.use('/processed', express.static(path.join(__dirname, 'processed')));
 
-// });
+app.get('/download/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'processed', filename);
+  
+    res.download(filePath, filename, (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error downloading file');
+      }
+    });
+  });
+  
 
-// app.post('/api/upload', (req, res) => {  
-//     const { title, artist, album, image, audio, slow, reverb } = req.body;
 
-//     const slowedAudio = AudioEditor.processAudio(audio, slow, reverb);
+app.post('/process', async (req, res) => {
+    const audioData = req.body;
 
-//     // edit slowedAudio metadata 
+    console.log("New user inputs", audioData);
+    const write = tagEditor.editMetadata(audioData.title, audioData.artist, audioData.album, audioData.filepath);
+    console.log("tags written", write);
+
+    try {
+         
+        const newTags = await tagEditor.parseMetadata(audioData.filepath);
+        console.log("After edits", newTags);
+
+        await tagEditor.editImage(audioData.image, audioData.audio, audioData.filepath);
+
+        const outputPath = `processed/${audioData.title}.mp3`;
+        await audioProcessor.processAudio(audioData.slow, audioData.reverb, audioData.filepath, outputPath);
+        console.log("Audio processed", outputPath);
+
+        
+
+    } catch (e) {
+        console.log(e);
+    }
     
-//     if (!req.file) {
-//         return res.status(400).send('file upload err');
-//     }
 
-//     // try {
-//         const audioBuffer = req.file.buffer;
+    // edit image
+   
 
-//         const outFile =   `processed_${req.file.originalname}`;
-    
-//         // const slowedAudio = await AudioEditor.processAudio(audio);
-//         // const metadata = await MetadataEditor.readMetadata(audioBuffer);
-
-//         // image
-//         // title
-//         // artist
-//         // album 
-    
-//     // } catch (e) {/
-
-//     // }
-
-// });
-
-
+    res.status(200).send({filename: audioData.title});
+});
 
 
 

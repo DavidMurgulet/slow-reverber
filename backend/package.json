@@ -10,12 +10,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "ffmpeg": "^0.0.4",
     "fluent-ffmpeg": "^2.1.2",
-    "mp3tag": "^1.0.3",
+    "id3-parser": "^3.0.0",
+    "jsmediatags": "^3.9.7",
+    "mp3tag": "^1.0.5",
     "multer": "^1.4.5-lts.1",
-    "node": "^18.20.0"
+    "node": "^18.20.0",
+    "node-id3": "^0.2.6",
+    "sox": "^0.1.0",
+    "sox-audio": "^0.3.0",
+    "util": "^0.12.5"
   }
 }
