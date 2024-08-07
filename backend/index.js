@@ -16,6 +16,8 @@ app.use(cors({
   }));
 
 app.use(parser.json());
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 
 
 const upload = multer( { dest: 'uploads/' } );
@@ -34,20 +36,7 @@ app.post('/parse', upload.single('file'), async (req, res) => {
     }
 });
 
-app.use('/processed', express.static(path.join(__dirname, 'processed')));
-
-app.get('/download/:filename', (req, res) => {
-    const filename = req.params.filename;
-    const filePath = path.join(__dirname, 'processed', filename);
-  
-    res.download(filePath, filename, (err) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send('Error downloading file');
-      }
-    });
-  });
-  
+app.use('/processed', express.static(path.join(__dirname, 'processed')));  
 
 
 app.post('/process', async (req, res) => {
@@ -63,11 +52,13 @@ app.post('/process', async (req, res) => {
         console.log("After edits", newTags);
 
         await tagEditor.editImage(audioData.image, audioData.audio, audioData.filepath);
+        const outputPath = path.join(__dirname, '..', 'public', 'processed', `${audioData.title}.mp3`);
 
-        const outputPath = `processed/${audioData.title}.mp3`;
+        // const outputPath = `processed/${audioData.title}.mp3`;
         await audioProcessor.processAudio(audioData.slow, audioData.reverb, audioData.filepath, outputPath);
         console.log("Audio processed", outputPath);
 
+        
         
 
     } catch (e) {

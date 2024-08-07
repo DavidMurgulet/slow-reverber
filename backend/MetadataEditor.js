@@ -44,8 +44,8 @@ class MetadataEditor {
                         title: tag.tags.title,
                         artist: tag.tags.artist,
                         album: tag.tags.album,
-                        filepath: path
-                        // image: tag.tags.picture
+                        filepath: path,
+                        image: tag.tags.picture
                     };
                     resolve(metadata);
                 },
