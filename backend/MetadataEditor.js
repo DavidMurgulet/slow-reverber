@@ -12,22 +12,6 @@ class MetadataEditor {
         }
 
         const success = NodeID3.write(tags, path)
-
-        // return new Promise ((resolve, reject) => {
-        //     if (!fs.existsSync(path)) {
-        //         return reject(new Error(`File not found: ${path}`));
-        //     }
-
-        //     NodeID3.write(tags, path, function(err, buffer) {
-        //         console.log("tags updated", tags);
-        //         console.log("path", buffer);
-
-        //         if (err) {
-        //             reject(err);
-        //         }
-        //         resolve(path);
-        //     });
-        // });
         return success;
     }
 
